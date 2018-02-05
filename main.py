@@ -6,38 +6,6 @@ import logging
 import json
 import signal
 
-class PushjetApiCall:
-    def __init__(self, message, subs):
-        self.message = message
-        self.subscription = subs
-
-
-class PushjetService:
-    def __init__(self, created, icon, name, public):
-        self.created = created
-        self.icon = icon
-        self.name = name
-        self.public = public
-
-
-class PushjetSubscription:
-    def __init__(self, uuid, timestamp, timestamp_checked, service):
-        self.uuid = uuid
-        self.timestamp = timestamp
-        self.timestamp_checked = timestamp_checked
-        self.service = service
-
-
-class PushjetMessage:
-    def __init__(self, level, link, message, service, timestamp, title):
-        self.level = level
-        self.link = link
-        self.message = message
-        self.service = service
-        self.timestamp = timestamp
-        self.title = title
-
-
 parser = argparse.ArgumentParser()
 parser.add_argument("-r","--relay", help="relay socket", default="ipc:///tmp/pushjet-relay.ipc")
 parser.add_argument("-p","--pub", help="publish socket", default="ipc:///tmp/pushjet-publisher.ipc")
@@ -56,24 +24,30 @@ def main():
 
     logging.info("Listening on '%s' and '%s'" % (args.relay, args.pub))
 
-    apiMessageRaw = socketRelay.recv(0)
+    while(True):
+        apiMessageRaw = socketRelay.recv(0)
 
-    logging.info("Parsing message")
-    #apiMessage = PushjetApiCall()
-    print 'raw message :'
-    print apiMessageRaw
-    print '---- \n parsed message :'
-    print json.loads(apiMessageRaw)
+        logging.info("Parsing message")
+        #apiMessage = PushjetApiCall()
+        print '---- \n parsed message :'
+        print json.loads(apiMessageRaw)
+
+        mes = json.loads(apiMessageRaw)
+
+        if 'message' in mes:
+            if mes['message']['timestamp'] > 0:
+                logging.info("Sending out message for %s" % mes['message']['service']['public'])
+                #socketPub.Send(fmt.Sprintf("%s %s", apiMessage.Message.Service.Public, apiMessageRaw), 0)
+
+        if 'subscription' in mes:
+            if mes['subscription']['timestamp'] > 0:
+                logging.info("Sending out subscription update for %s" % mes['subscription']['uuid'])
+                #socketPub.Send(fmt.Sprintf("%s %s", apiMessage.Subscription.Uuid, apiMessageRaw), 0)
 
 
-def sigterm_handler(signal, frame):
-    # save the state here or do whatever you want
-    logging.warn('Caught term signal, closing connections!')
+    logging.warn('Ending, closing connections!')
     socketRelay.close(args.relay)
     socketPub.close(args.pub)
-    sys.exit(0)
-
-signal.signal(signal.SIGTERM, sigterm_handler)
 
 
 if __name__ == '__main__':
