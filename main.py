@@ -53,11 +53,11 @@ def main():
     socketRelay.bind(args.relay)
     socketPub.bind(args.pub)
 
-    logging.log("Listening on '%s' and '%s'" % (args.relay, args.pub))
+    logging.info("Listening on '%s' and '%s'" % (args.relay, args.pub))
 
     apiMessageRaw = socketRelay.recv(0)
 
-    logging.log("Parsing message")
+    logging.info("Parsing message")
     #apiMessage = PushjetApiCall()
     print 'raw message :'
     print apiMessageRaw
