@@ -37,11 +37,13 @@ def main():
         if 'message' in mes:
             if mes['message']['timestamp'] > 0:
                 logging.info("Sending out message for %s" % mes['message']['service']['public'])
+                socketPub.send('%s %s' % (mes['message']['service']['public'],apiMessageRaw))
                 #socketPub.Send(fmt.Sprintf("%s %s", apiMessage.Message.Service.Public, apiMessageRaw), 0)
 
         if 'subscription' in mes:
             if mes['subscription']['timestamp'] > 0:
                 logging.info("Sending out subscription update for %s" % mes['subscription']['uuid'])
+                socketPub.send('%s %s' % (mes['subscription']['uuid'],apiMessageRaw))
                 #socketPub.Send(fmt.Sprintf("%s %s", apiMessage.Subscription.Uuid, apiMessageRaw), 0)
 
 
