@@ -4,6 +4,7 @@ import zmq
 import argparse
 import logging
 import json
+import signal
 
 class PushjetApiCall:
     def __init__(self, message, subs):
@@ -65,7 +66,7 @@ def main():
     print '---- \n parsed message :'
     print json.loads(apiMessageRaw)
 
-    
+
 
 
 def sigterm_handler(signal, frame):
