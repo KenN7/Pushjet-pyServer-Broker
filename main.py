@@ -44,7 +44,7 @@ parser.add_argument("-p","--pub", help="publish socket", default="ipc:///tmp/pus
 
 def main():
     args = parser.parse_args()
-    logging.setLevel(10)
+    logging.basicConfig(level=logging.DEBUG)
     logging.info('Starting up the publishing server')
 
     context = zmq.Context()
