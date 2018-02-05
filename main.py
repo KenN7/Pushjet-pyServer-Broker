@@ -42,8 +42,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-r","--relay", help="relay socket", default="ipc:///tmp/pushjet-relay.ipc")
 parser.add_argument("-p","--pub", help="publish socket", default="ipc:///tmp/pushjet-publisher.ipc")
 
-signal.signal(signal.SIGTERM, sigterm_handler)
-
 def main():
     args = parser.parse_args()
     logging.info('Starting up the publishing server')
@@ -67,8 +65,6 @@ def main():
     print json.loads(apiMessageRaw)
 
 
-
-
 def sigterm_handler(signal, frame):
     # save the state here or do whatever you want
     logging.warn('Caught term signal, closing connections!')
@@ -76,6 +72,7 @@ def sigterm_handler(signal, frame):
     socketPub.close(args.pub)
     sys.exit(0)
 
+signal.signal(signal.SIGTERM, sigterm_handler)
 
 
 if __name__ == '__main__':
