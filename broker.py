@@ -29,9 +29,10 @@ def main():
 
         logging.info("Parsing message")
         #apiMessage = PushjetApiCall()
-        logging.debug('---- \n parsed message :',json.loads(apiMessageRaw))
+        logging.debug('---- \n parsed message :')
 
         mes = json.loads(apiMessageRaw)
+        logging.debug(mes)
 
         if 'message' in mes:
             if mes['message']['timestamp'] > 0:
