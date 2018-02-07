@@ -29,8 +29,7 @@ def main():
 
         logging.info("Parsing message")
         #apiMessage = PushjetApiCall()
-        print '---- \n parsed message :'
-        print json.loads(apiMessageRaw)
+        logging.debug('---- \n parsed message :',json.loads(apiMessageRaw))
 
         mes = json.loads(apiMessageRaw)
 
