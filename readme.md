@@ -14,4 +14,4 @@ pip install -r requirements.txt
 ```
 
 ## Launch
-python main.py (-r "relay socket") (-p "publish socket")
+python broker.py (-r "relay socket") (-p "publish socket")
